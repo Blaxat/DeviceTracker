@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: device-tracker-deployment  
+  labels:
+    app: device-tracker
+spec:
+  replicas: 3  
+  selector:
+    matchLabels:
+      app: device-tracker
+  template:
+    metadata:
+      labels:
+        app: device-tracker
+    spec:
+      containers:
+        - name: device-tracker-container  
+          image: akshay047/device_tracker:latest  
+          ports:
+            - containerPort: 8000  
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: device-tracker-service
+spec:
+  type: LoadBalancer  
+  ports:
+    - port: 8000  
+      targetPort: 8000 
+      nodePort: 30007  
+      protocol: TCP
+  selector:
+    app: device-tracker
